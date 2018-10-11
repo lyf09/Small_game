@@ -1,0 +1,114 @@
+	*{
+		margin:0px;
+		padding: 0px;
+		/*background-color:#9C9;*/
+	}
+	#contentdiv{
+		width:320px;
+		height:568px;
+		position: absolute;top:50px;left:500px;
+		/*margin:50px auto;*/
+
+	}
+	#startdiv{
+		width:320px;
+		height:568px;
+		background-image:url("image/01.png");
+	}
+	#startdiv button{
+		width:120px;
+		height:40px;
+		position: absolute;top:400px;left:110px;
+		/*margin:400px 100px; */
+		border-radius:10px;
+		font-size:20px;
+		border:2px solid gray;
+	}
+	#startdiv button:hover{
+		background-color:gray;
+		border:2px solid #CF6;
+
+	}
+	#maindiv{
+		width:320px;
+		height:568px;
+		background-image:url("image/background_1.png");
+		display:none;
+	}
+	#scorediv{
+		font-size:20px;
+		font-weight:bold;
+		display:none;
+		width:120px;
+		height:90px;
+		position: absolute;top:10px;left:10px;
+		/*margin:10px 10px; 	*/
+	}
+	#pausediv{
+		position: absolute;top:220px;left:75px;
+		border:2px solid #CF6;
+		text-align:center;
+		background-color: white;
+		border-radius:10px;
+		display:none;
+		z-index:2;
+	}
+	#pausediv div{
+		width:160px;
+		height:50px;
+		font-size:20px;
+		font-weight:bold;
+	}
+	#pausediv div button{
+		margin-top:10px ;
+		width:120px;
+		height:30px;
+		font-size:20px;
+	}
+	#pausediv div button:hover{
+		background-color:gray;
+		border:2px solid #CF6;
+
+	}
+	#enddiv{
+		position: absolute;top:210px;left:75px;
+		border:2px solid #CF6;
+		text-align:center;
+		background-color: gray;
+		border-radius:10px;
+		display:none;
+		z-index:2;
+	}
+	.planetext{
+		width:160px;
+		height:30px;
+		line-height:30px;
+		font-size:18px;
+		font-weight: bold;
+	}
+	#planescore{
+		width:160px;
+		height:30px;
+		line-height:30px;
+		border-top: 1px solid gray;
+		border-bottom: 1px solid gray;
+		font-size:18px;
+		font-weight: bold;
+	}
+	#enddiv div{
+		width:160px;
+		height:50px;
+
+	}
+	#enddiv div button{
+		margin-top:10px ;
+		width:90px;
+		height:30px;
+		border-radius:10px;
+		font-size:20px;
+	}
+	#enddiv div button:hover{
+		background-color:gray;
+		border:2px solid #CF6;
+
+	}

@@ -1,0 +1,148 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<script type="text/javascript">
+		var canvas,context ;
+		var velocity = 7, pipeHeight = 150;
+		var birdIndex = 0;
+		var ver1 = 10,ver2 = 0,gravity = 2;
+		var tid;
+		var score = 0,isScored = false;
+		var birds = ["images/0.gif","images/1.gif","images/2.gif"];
+		var background = new Background(0,0,400,600,'images/bg.png');
+		var ground = new Background(0,550,400,180,'images/ground.png');
+		var upPipeDraw = new Background(0,0,100,200,'images/pipe.png');
+		var downPipeDraw = new Background(0,340,100,220,'images/pipe.png');
+		var bird = new Bird(200,150,40,40,'images/0.gif');
+	
+
+function init(){
+	  canvas = document.getElementById('canvas');
+	  context = canvas.getContext('2d');
+	  drawWall();
+//setInterval();两参数（周期执行函数，周期行的时间）
+      tid= setInterval(drawWall,60);
+// 触发onkeyup 事件，执行函数keyUpAction
+	  document.onkeyup = keyUpAction;
+}
+//系统可能自动传入一个参数
+function keyUpAction(e){
+	var e = e || event;//解决浏览器对事件的兼容性
+	var currentKey = e.keyCode || e.Which || e.charCode;
+	switch(currentKey){ 
+		case 32: 
+		bird.y -= 60;
+		break;
+	}
+
+}
+function drawWall(){
+	background.draw();
+	ground.draw();
+	upPipeDraw.draw0();
+	downPipeDraw.draw1();
+	bird.draw();
+	circle();
+}
+function circle(){
+//判断小鸟的碰撞逻辑
+	var groundCondition;
+	var upCondition;
+	var downCondition;
+ 	groundCondition = bird.y + bird.height >= ground.y;
+ 	upCondition = (bird.x + bird.width > upPipeDraw.x  && bird.x + bird.width < upPipeDraw.x + upPipeDraw.width && bird.y > upPipeDraw.y  && bird.y < upPipeDraw.y+upPipeDraw.height) || (bird.x > upPipeDraw.x && bird.x < upPipeDraw.x + upPipeDraw.width && bird.y > upPipeDraw.y  && bird.y< upPipeDraw.y + upPipeDraw.height);
+ 	downCondition  = (bird.x + bird.width > downPipeDraw.x  && bird.x + bird.width < downPipeDraw.x + downPipeDraw.width &&  bird.y + bird.height > downPipeDraw.y  && bird.y + bird.height< downPipeDraw.y + downPipeDraw.height) || (bird.x >downPipeDraw.x && bird.x < downPipeDraw.x + downPipeDraw.width &&  bird.y + bird.height > downPipeDraw.y && bird.y + bird.height < downPipeDraw.y + downPipeDraw.height);
+ 	var isCrash = groundCondition || upCondition || downCondition;
+ if(isCrash){
+ 	context.fillStyle='red';     
+    context.font = '60px Accent';
+    context.fillText("Game Over!! " ,60,300);
+  	clearInterval(tid);
+    context.fillStyle='rgb(600,100,400)';     
+    context.font = '40px Accent';
+    context.fillText("You got  " + score + " !",110,110);//文本显示总得分
+ 	return;
+ }
+ //鸟的坐标变化
+	 ver2 = ver1 + gravity;
+	 bird.y += (ver1 + ver2) * 0.5;
+// 柱子的移动
+if(upPipeDraw.x + upPipeDraw.width >0 ){
+  	upPipeDraw.x -= velocity;
+  	downPipeDraw.x -= velocity;
+	}
+	else{
+	 	 upPipeDraw.x = 400;
+  		 downPipeDraw.x = 400;
+  		  upPipeDraw.height = 100 + Math.random()*200;//random()返回0~1件任意数字
+  		 downPipeDraw.y =  upPipeDraw.height + pipeHeight;
+  		 //下方有地面高度的存在
+  		 downPipeDraw.height = 600 -  downPipeDraw.y - 45;
+  		 isScored = true; 
+		}
+//分数累加
+if(isScored && bird.x > upPipeDraw.x+upPipeDraw.width){
+	isScored = false;
+	score ++ ;
+	context.fillStyle='black';     
+   	context.font = '50px Accent';
+    context.fillText("you got  " + score + " !",110,110);	//每过一关，显示一次得分
+    //关卡难度提升
+		if(score > 0 && score % 3 == 0){
+				velocity +=3;
+				ver1++;
+			}
+		}
+}
+
+function Background(x,y,width,height,image_src){
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	//创建图片对象
+	var image = new Image();
+	image.src = image_src;
+	//将创建的对象作为对象属性
+	this.image = image;
+	this.draw = bgDraw;
+	this.draw0 = upPipeDraw;
+    this.draw1=downPipeDraw;
+}
+function bgDraw(){
+	context.drawImage(this.image,this.x,this.y,this.width,this.height);
+}
+<!--编写上方障碍物绘图方法-->
+ function upPipeDraw(){
+	//将当前图片部分剪切放在画布上drawImage(image,src_x,src_y,src_width,src_height,x,y,width,height);
+	context.drawImage(this.image,150,500,150,800,this.x,this.y,this.width,this.height);
+}
+<!--编写下方障碍物绘图方法-->
+ function downPipeDraw(){
+	context.drawImage(this.image,0,500,150,800,this.x,this.y,this.width,this.height);
+}
+
+<!--鸟的创建和绘制 -->
+ function Bird(x,y,width,height,image_src){
+ 	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	this.image_src = image_src;
+	this.draw = birdDraw;
+ }
+ function birdDraw(){
+ 	var image = new Image();
+ 	image.src = birds[birdIndex % 3];
+ 	context.drawImage(image,this.x,this.y,this.width,this.height);
+ 	birdIndex++;
+ }
+		</script>
+</head>
+<body onload="init();">
+	<center>
+		<canvas id="canvas" width="400px" height="600px" style="background-color:gray">
+	</center>
+</body>
+</head>
+</html>
